@@ -4,3 +4,5 @@ CakePHP 3
 /config/app.php
 /tmp/*
 /logs/*
+/.idea/*
+/composer.lock
