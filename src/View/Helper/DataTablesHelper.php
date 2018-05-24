@@ -31,7 +31,7 @@ class DataTablesHelper extends Helper
      * @param \DataTables\Utility\TableUtility $tableUtility
      * @return string
      */
-    public function renderTableView(TableUtility $tableUtility): string
+    public function renderTableUtility(TableUtility $tableUtility): string
     {
         return $this->table($tableUtility->getTable(), $tableUtility->getOptions(), $tableUtility->getClass());
     }
