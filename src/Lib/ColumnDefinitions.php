@@ -5,6 +5,11 @@
 
 namespace DataTables\Lib;
 
+/**
+ * Class ColumnDefinitions
+ *
+ * @package DataTables\Lib
+ */
 class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \Countable
 {
     protected $columns = [];

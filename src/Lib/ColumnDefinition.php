@@ -4,12 +4,15 @@ namespace DataTables\Lib;
 
 /**
  * A convenience array wrapper that holds a single column definition
+ *
  * @method ColumnDefinition visible()
  * @method ColumnDefinition notVisible()
  * @method ColumnDefinition orderable()
  * @method ColumnDefinition notOrderable()
  * @method ColumnDefinition searchable()
  * @method ColumnDefinition notSearchable()
+ *
+ * @package DataTables\Lib
  */
 class ColumnDefinition implements \JsonSerializable, \ArrayAccess
 {
@@ -29,7 +32,7 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
         $this->owner = $owner;
 
         $this->switchesNegative = array_map(function ($e) {
-            return 'not'.ucfirst($e);
+            return 'not' . ucfirst($e);
         }, $this->switchesPositive);
     }
 
@@ -40,18 +43,19 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
      * @param array $args
      * @return \DataTables\Lib\ColumnDefinition
      */
-    public function add(...$args) : ColumnDefinition
+    public function add(...$args): ColumnDefinition
     {
         return $this->owner->add(...$args);
     }
 
     /**
      * Set one or many properties
+     *
      * @param $key string|array If array given, it should be key -> value
-     * @param $value: The singular value to set, if string $key given
+     * @param $value : The singular value to set, if string $key given
      * @return ColumnDefinition
      */
-    public function set($key, $value = null) : ColumnDefinition
+    public function set($key, $value = null): ColumnDefinition
     {
         if (is_array($key)) {
             if (!empty($value))
@@ -61,11 +65,12 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
         } else {
             $this->content[$key] = $value;
         }
+
         return $this;
     }
 
     /* provide some convenience wrappers for set() */
-    public function __call($name, $arguments) : ColumnDefinition
+    public function __call($name, $arguments): ColumnDefinition
     {
         if (in_array($name, $this->switchesPositive)) {
             if (!empty($arguments))
@@ -84,24 +89,26 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
         return $this;
     }
 
-    public function unset(string $key) : ColumnDefinition
+    public function unset(string $key): ColumnDefinition
     {
         unset($this->content[$key]);
+
         return $this;
     }
 
     /**
-     * @param $name: see CallbackFunction::__construct
-     * @param $args: see CallbackFunction::__construct
+     * @param $name : see CallbackFunction::__construct
+     * @param $args : see CallbackFunction::__construct
      * @return ColumnDefinition
      */
-    public function render(string $name, array $args = []) : ColumnDefinition
+    public function render(string $name, array $args = []): ColumnDefinition
     {
         $this->content['render'] = new CallbackFunction($name, $args);
+
         return $this;
     }
 
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         return $this->content;
     }

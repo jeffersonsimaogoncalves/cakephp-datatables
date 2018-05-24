@@ -6,6 +6,11 @@
 
 namespace DataTables\Lib;
 
+/**
+ * Class CallbackFunction
+ *
+ * @package DataTables\Lib
+ */
 class CallbackFunction implements \JsonSerializable
 {
 
