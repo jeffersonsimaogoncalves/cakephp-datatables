@@ -4,6 +4,8 @@ namespace DataTables\View\Helper;
 
 use Cake\View\Helper;
 use DataTables\Lib\CallbackFunction;
+use DataTables\Utility\CallbackTrait;
+use DataTables\Utility\TableUtility;
 
 /**
  * Class DataTablesHelper
@@ -14,6 +16,8 @@ use DataTables\Lib\CallbackFunction;
  */
 class DataTablesHelper extends Helper
 {
+    use CallbackTrait;
+
     public $helpers = ['Html'];
 
     protected $_defaultConfig = [
@@ -22,6 +26,15 @@ class DataTablesHelper extends Helper
         'serverSide' => true,
         'deferRender' => true,
     ];
+
+    /**
+     * @param \DataTables\Utility\TableUtility $tableUtility
+     * @return string
+     */
+    public function renderTableView(TableUtility $tableUtility): string
+    {
+        return $this->table($tableUtility->getTable(), $tableUtility->getOptions(), $tableUtility->getClass());
+    }
 
     /**
      * @param array $config
@@ -53,18 +66,6 @@ class DataTablesHelper extends Helper
                 ],
             ]);
         }
-    }
-
-    /**
-     * Return a Javascript function wrapper to be used in DataTables configuration
-     *
-     * @param string $name Name of Javascript function to call
-     * @param array $args Optional array of arguments to be passed when calling
-     * @return CallbackFunction
-     */
-    public function callback(string $name, array $args = []): CallbackFunction
-    {
-        return new CallbackFunction($name, $args);
     }
 
     /**

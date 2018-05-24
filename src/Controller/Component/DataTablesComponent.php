@@ -9,8 +9,8 @@ use Cake\Database\Driver\Postgres;
 use Cake\Http\Exception\BadRequestException;
 use Cake\ORM\Locator\LocatorAwareTrait;
 use Cake\ORM\Query;
-use DataTables\Lib\CallbackFunction;
 use DataTables\Lib\ColumnDefinitions;
+use DataTables\Utility\CallbackTrait;
 
 /**
  * Class DataTablesComponent
@@ -19,7 +19,8 @@ use DataTables\Lib\ColumnDefinitions;
  */
 class DataTablesComponent extends Component
 {
-    use LocatorAwareTrait;
+    use LocatorAwareTrait,
+        CallbackTrait;
 
     protected $_defaultConfig = [
         'start' => 0,
@@ -365,15 +366,5 @@ class DataTablesComponent extends Component
         $columnDesc = $table->getSchema()->getColumn($column);
 
         return $this->_defaultComparison[$columnDesc['type']] ?? '=';
-    }
-
-    /**
-     * @param string $name
-     * @param array $args
-     * @return \DataTables\Lib\CallbackFunction
-     */
-    public function callback(string $name, array $args = []): CallbackFunction
-    {
-        return new CallbackFunction($name, $args);
     }
 }
