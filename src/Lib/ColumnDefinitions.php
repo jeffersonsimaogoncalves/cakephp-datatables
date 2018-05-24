@@ -5,8 +5,6 @@
 
 namespace DataTables\Lib;
 
-use Traversable;
-
 class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \Countable
 {
     protected $columns = [];
@@ -14,18 +12,18 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
 
     /**
      * @param $column string|array name or pre-filled array
-     * @param $fieldname: ORM field this column is based on
+     * @param string $fieldName : ORM field this column is based on
      * @return ColumnDefinition
      */
-    public function add($column, string $fieldname = null) : ColumnDefinition
+    public function add($column, string $fieldName = null): ColumnDefinition
     {
         if (!is_array($column))
             $column = [
                 'name' => $column,
                 'data' => $column, // a good guess (user can adjust it later)
             ];
-        if ($fieldname)
-            $column['field'] = $fieldname;
+        if ($fieldName)
+            $column['field'] = $fieldName;
 
         $column = new ColumnDefinition($column, $this);
         $this->store($column);
@@ -36,6 +34,7 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
     /**
      * Set titles of columns in given order
      * Convenience method for setting all titles at once
+     *
      * @param $titles array of titles in order of columns
      */
     public function setTitles(array $titles)
@@ -52,17 +51,19 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
 
     /**
      * Serialize to an array in json
-     * @return: column definitions
+     *
+     * @return array: column definitions
      */
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         return array_values($this->columns);
     }
 
-    public function offsetExists($offset) : bool
+    public function offsetExists($offset): bool
     {
         if (is_numeric($offset))
             return isset($this->columns[$offset]);
+
         return isset($this->index[$offset]);
     }
 
@@ -70,6 +71,7 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
     {
         if (is_numeric($offset))
             return $this->columns[$offset];
+
         return $this->columns[$this->index[$offset]];
     }
 

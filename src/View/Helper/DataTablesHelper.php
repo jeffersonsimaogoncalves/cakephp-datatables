@@ -1,13 +1,16 @@
 <?php
+
 namespace DataTables\View\Helper;
 
 use Cake\View\Helper;
 use DataTables\Lib\CallbackFunction;
 
 /**
- * DataTables helper
+ * Class DataTablesHelper
  *
+ * @property \Cake\View\Helper\HtmlHelper Html
  *
+ * @package DataTables\View\Helper
  */
 class DataTablesHelper extends Helper
 {
@@ -20,6 +23,10 @@ class DataTablesHelper extends Helper
         'deferRender' => true,
     ];
 
+    /**
+     * @param array $config
+     * @throws \Aura\Intl\Exception
+     */
     public function initialize(array $config)
     {
         /* set default i18n (not possible in _$defaultConfig due to use of __d() */
@@ -47,27 +54,30 @@ class DataTablesHelper extends Helper
             ]);
         }
     }
+
     /**
      * Return a Javascript function wrapper to be used in DataTables configuration
+     *
      * @param string $name Name of Javascript function to call
      * @param array $args Optional array of arguments to be passed when calling
      * @return CallbackFunction
      */
-    public function callback(string $name, array $args = []) : CallbackFunction
+    public function callback(string $name, array $args = []): CallbackFunction
     {
         return new CallbackFunction($name, $args);
     }
 
     /**
      * Return a table with dataTables overlay
-     * @param $id: DOM id of the table
-     * @param $dtOptions: Options for DataTables (to be merged with this helper's config as defaults)
-     * @param $htmlOptions: Options for the table, e.g. CSS classes
+     *
+     * @param $id : DOM id of the table
+     * @param $dtOptions : Options for DataTables (to be merged with this helper's config as defaults)
+     * @param $htmlOptions : Options for the table, e.g. CSS classes
      * @return string containing a <table> and a <script> element
      */
-    public function table(string $id = 'datatable', array $dtOptions = [], array $htmlOptions = []) : string
+    public function table(string $id = 'datatable', array $dtOptions = [], array $htmlOptions = []): string
     {
-        $htmlOptions = array_merge($htmlOptions,  [
+        $htmlOptions = array_merge($htmlOptions, [
             'id' => $id,
             'class' => 'dataTable ' . ($htmlOptions['class'] ?? ''),
         ]);
@@ -75,18 +85,19 @@ class DataTablesHelper extends Helper
 
         $code = $this->draw("#{$id}", $dtOptions);
 
-        return $table.$this->Html->scriptBlock($code);
+        return $table . $this->Html->scriptBlock($code);
     }
 
     /**
      * Return JavaScript code to initialize DataTables object
      * Use this method if you want to render the <table> element yourself
      * Typically the output of this method is fed to HtmlHelper::scriptBlock()
+     *
      * @param string $selector JQuery selector for the <table> element
      * @param array $options Optional additional/replacement configuration to this helper's config
      * @return string
      */
-    public function draw(string $selector, array $options = []) : string
+    public function draw(string $selector, array $options = []): string
     {
         // incorporate any defaults set earlier
         $options += $this->getConfig();
@@ -134,7 +145,7 @@ class DataTablesHelper extends Helper
                 if ($o[0] === ($v['data'] ?? null) || $o[0] === ($v['field'] ?? null)) {
                     $order[$i][0] = $key;
                     break;
-    }
+                }
             }
         }
     }

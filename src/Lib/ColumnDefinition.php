@@ -4,12 +4,12 @@ namespace DataTables\Lib;
 
 /**
  * A convenience array wrapper that holds a single column definition
- * @method ColumnDefintion visible()
- * @method ColumnDefintion notVisible()
- * @method ColumnDefintion orderable()
- * @method ColumnDefintion notOrderable()
- * @method ColumnDefintion searchable()
- * @method ColumnDefintion notSearchable()
+ * @method ColumnDefinition visible()
+ * @method ColumnDefinition notVisible()
+ * @method ColumnDefinition orderable()
+ * @method ColumnDefinition notOrderable()
+ * @method ColumnDefinition searchable()
+ * @method ColumnDefinition notSearchable()
  */
 class ColumnDefinition implements \JsonSerializable, \ArrayAccess
 {
@@ -36,6 +36,9 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
     /**
      * Refer back to owner's add()
      * A convenient way to add another column
+     *
+     * @param array $args
+     * @return \DataTables\Lib\ColumnDefinition
      */
     public function add(...$args) : ColumnDefinition
     {
