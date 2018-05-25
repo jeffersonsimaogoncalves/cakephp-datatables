@@ -3,9 +3,9 @@
 namespace DataTables\View\Helper;
 
 use Cake\View\Helper;
-use DataTables\Lib\CallbackFunction;
-use DataTables\Utility\CallbackTrait;
-use DataTables\Utility\TableUtility;
+use JeffersonSimaoGoncalves\Utils\Lib\CallbackFunction;
+use JeffersonSimaoGoncalves\Utils\CallbackTrait;
+use JeffersonSimaoGoncalves\Utils\TableUtility;
 
 /**
  * Class DataTablesHelper
@@ -28,7 +28,7 @@ class DataTablesHelper extends Helper
     ];
 
     /**
-     * @param \DataTables\Utility\TableUtility $tableUtility
+     * @param \JeffersonSimaoGoncalves\Utils\TableUtility $tableUtility
      * @return string
      */
     public function renderTableUtility(TableUtility $tableUtility): string

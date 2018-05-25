@@ -1,40 +1,49 @@
 {
-    "name": "jeffersonsimaogoncalves/cakephp-datatables",
-    "description": "jQuery DataTables for CakePHP 3",
-    "homepage": "https://github.com/jeffersonsimaogoncalves/cakephp-datatables",
-    "type": "cakephp-plugin",
-    "keywords": ["cakephp", "datatables"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Frank Heider",
-            "homepage": "https://github.com/fheider",
-            "role": "Author"
-        },
-        {
-            "name": "Johannes Jordan",
-            "homepage": "https://github.com/ypnos-web",
-            "role": "Author"
-        },
-        {
-            "name": "Jefferson Simão Gonçalves",
-            "homepage": "https://github.com/jeffersonsimaogoncalves",
-            "role": "Author"
-        }
-    ],
-    "require": {
-        "php": ">=7.0",
-        "cakephp/cakephp": "^3.6"
+  "name": "jeffersonsimaogoncalves/cakephp-datatables",
+  "description": "jQuery DataTables for CakePHP 3",
+  "homepage": "https://github.com/jeffersonsimaogoncalves/cakephp-datatables",
+  "type": "cakephp-plugin",
+  "keywords": [
+    "cakephp",
+    "datatables"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Frank Heider",
+      "homepage": "https://github.com/fheider",
+      "role": "Author"
     },
-    "autoload": {
-        "psr-4": {
-            "DataTables\\": "src"
-        }
+    {
+      "name": "Johannes Jordan",
+      "homepage": "https://github.com/ypnos-web",
+      "role": "Author"
     },
-    "autoload-dev": {
-        "psr-4": {
-            "DataTables\\Test\\": "tests",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
-        }
+    {
+      "name": "Jefferson Simão Gonçalves",
+      "homepage": "https://github.com/jeffersonsimaogoncalves",
+      "role": "Author"
     }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "cakephp/cakephp": "^3.6",
+    "jeffersonsimaogoncalves/cakephp-utils": "dev-master"
+  },
+  "support": {
+    "issues": "https://github.com/jeffersonsimaogoncalves/cakephp-datatables/issues",
+    "source": "https://github.com/jeffersonsimaogoncalves/cakephp-datatables"
+  },
+  "autoload": {
+    "psr-4": {
+      "DataTables\\": "src"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true,
+    "htaccess-protect": true,
+    "optimize-autoloader": true
+  }
 }
