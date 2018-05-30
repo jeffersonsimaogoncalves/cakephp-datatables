@@ -70,8 +70,7 @@ dt.init.delayedSearch = function (table, minSearchCharacters, delay, selector) {
  * @param table dataTables object
  * @param sender jQuery selector for the sending object
  */
-dt.init.searchTrigger = function (table, sender)
-{
+dt.init.searchTrigger = function (table, sender) {
     $(document).on('change', sender, function () {
         var value = table.api().search();
         if (!value) // no search results displayed, need no update
@@ -181,7 +180,9 @@ dt.init.fitIntoWindow = function (table, offset, fullscreen) {
     var resizeTimer;
     $(window).on('resize', function (e) {
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function () { table.trigger('fitIntoWindow') }, 250);
+        resizeTimer = setTimeout(function () {
+            table.trigger('fitIntoWindow')
+        }, 250);
     });
 
     // allow toggling fullscreen mode
@@ -199,8 +200,7 @@ dt.init.fitIntoWindow = function (table, offset, fullscreen) {
  * @param meta Object containing additional information about the cell
  * @returns Manipulated cell data
  */
-dt.render.date = function (data, type, full, meta)
-{
+dt.render.date = function (data, type, full, meta) {
     if (type === 'display') {
         var date = new Date(data);
         return date.toLocaleDateString(document.documentElement.lang);
@@ -216,8 +216,7 @@ dt.render.date = function (data, type, full, meta)
  * @param source Source for target value: { selector, property, default }
  * @returns The manipulated data object with new property
  */
-dt.appendProperty = function (data, settings, target, source)
-{
+dt.appendProperty = function (data, settings, target, source) {
     var value = $(source.selector).prop(source.property);
     data[target] = (typeof(value) === 'undefined' ? source.default : value);
     return data;
@@ -228,8 +227,7 @@ dt.appendProperty = function (data, settings, target, source)
  * Inspired by dataTable.render.text()
  * Should be used in all render functions!
  */
-dt.h = function (d)
-{
+dt.h = function (d) {
     return typeof d === 'string' ?
         d.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') :
         d;
@@ -255,4 +253,8 @@ dt.resetColumnSearch = function (table) {
 
     if (needRedraw)
         table.api().draw();
+};
+
+dt.render.html = function (data, type, full, meta) {
+    return data;
 };
