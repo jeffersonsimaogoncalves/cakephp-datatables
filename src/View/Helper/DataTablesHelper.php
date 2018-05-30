@@ -3,8 +3,8 @@
 namespace DataTables\View\Helper;
 
 use Cake\View\Helper;
-use JeffersonSimaoGoncalves\Utils\Lib\CallbackFunction;
 use JeffersonSimaoGoncalves\Utils\CallbackTrait;
+use JeffersonSimaoGoncalves\Utils\Lib\CallbackFunction;
 use JeffersonSimaoGoncalves\Utils\TableUtility;
 
 /**
@@ -29,6 +29,7 @@ class DataTablesHelper extends Helper
 
     /**
      * @param \JeffersonSimaoGoncalves\Utils\TableUtility $tableUtility
+     *
      * @return string
      */
     public function renderTableUtility(TableUtility $tableUtility): string
@@ -38,6 +39,7 @@ class DataTablesHelper extends Helper
 
     /**
      * @param array $config
+     *
      * @throws \Aura\Intl\Exception
      */
     public function initialize(array $config)
@@ -71,9 +73,10 @@ class DataTablesHelper extends Helper
     /**
      * Return a table with dataTables overlay
      *
-     * @param $id : DOM id of the table
-     * @param $dtOptions : Options for DataTables (to be merged with this helper's config as defaults)
+     * @param $id          : DOM id of the table
+     * @param $dtOptions   : Options for DataTables (to be merged with this helper's config as defaults)
      * @param $htmlOptions : Options for the table, e.g. CSS classes
+     *
      * @return string containing a <table> and a <script> element
      */
     public function table(string $id = 'datatable', array $dtOptions = [], array $htmlOptions = []): string
@@ -95,7 +98,8 @@ class DataTablesHelper extends Helper
      * Typically the output of this method is fed to HtmlHelper::scriptBlock()
      *
      * @param string $selector JQuery selector for the <table> element
-     * @param array $options Optional additional/replacement configuration to this helper's config
+     * @param array  $options  Optional additional/replacement configuration to this helper's config
+     *
      * @return string
      */
     public function draw(string $selector, array $options = []): string

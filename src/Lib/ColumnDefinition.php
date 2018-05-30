@@ -43,6 +43,7 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
      * A convenient way to add another column
      *
      * @param array $args
+     *
      * @return \DataTables\Lib\ColumnDefinition
      */
     public function add(...$args): ColumnDefinition
@@ -53,8 +54,9 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
     /**
      * Set one or many properties
      *
-     * @param $key string|array If array given, it should be key -> value
+     * @param $key   string|array If array given, it should be key -> value
      * @param $value : The singular value to set, if string $key given
+     *
      * @return ColumnDefinition
      */
     public function set($key, $value = null): ColumnDefinition
@@ -101,6 +103,7 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
     /**
      * @param $name : see CallbackFunction::__construct
      * @param $args : see CallbackFunction::__construct
+     *
      * @return ColumnDefinition
      */
     public function render(string $name, array $args = []): ColumnDefinition

@@ -145,8 +145,9 @@ class DataTablesComponent extends Component
      * Alters $options if delegateSearch is set
      * In this case, the model needs to handle the 'globalSearch' option.
      *
-     * @param $options : Query options
+     * @param                         $options : Query options
      * @param ColumnDefinitions|array $columns Column definitions
+     *
      * @return bool : true if additional filtering takes place
      */
     private function _filter(array &$options, &$columns): bool
@@ -217,9 +218,10 @@ class DataTablesComponent extends Component
      * Find data
      *
      * @param string $tableName : ORM table name
-     * @param string $finder : Finder name (as in Table::find())
-     * @param array $options : Finder options (as in Table::find())
-     * @param array $columns : Column definitions needed for filter/order operations
+     * @param string $finder    : Finder name (as in Table::find())
+     * @param array  $options   : Finder options (as in Table::find())
+     * @param array  $columns   : Column definitions needed for filter/order operations
+     *
      * @return Query to be evaluated (Query::count() may have already been called)
      */
     public function find(string $tableName, string $finder = 'all', array $options = [], array $columns = []): Query
@@ -293,8 +295,8 @@ class DataTablesComponent extends Component
     }
 
     /**
-     * @param $column
-     * @param $value
+     * @param        $column
+     * @param        $value
      * @param string $type
      */
     private function _addCondition($column, $value, $type = 'and')
@@ -345,8 +347,9 @@ class DataTablesComponent extends Component
     /**
      * Get comparison operator by entity and column name.
      *
-     * @param \Cake\ORM\Table|\Cake\ORM\Association $table : Target ORM table
-     * @param string $column : Database column name (may be in form Table.column)
+     * @param \Cake\ORM\Table|\Cake\ORM\Association $table  : Target ORM table
+     * @param string                                $column : Database column name (may be in form Table.column)
+     *
      * @return string : Database comparison operator
      */
     protected function _getComparison($table, string $column): string

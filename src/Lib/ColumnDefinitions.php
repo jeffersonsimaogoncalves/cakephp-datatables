@@ -16,8 +16,9 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
     protected $index = [];
 
     /**
-     * @param $column string|array name or pre-filled array
+     * @param        $column    string|array name or pre-filled array
      * @param string $fieldName : ORM field this column is based on
+     *
      * @return ColumnDefinition
      */
     public function add($column, string $fieldName = null): ColumnDefinition
