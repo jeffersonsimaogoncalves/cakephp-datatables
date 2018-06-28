@@ -21,9 +21,9 @@ class DataTablesHelper extends Helper
     public $helpers = ['Html'];
 
     protected $_defaultConfig = [
-        'searching' => true,
-        'processing' => true,
-        'serverSide' => true,
+        'searching'   => true,
+        'processing'  => true,
+        'serverSide'  => true,
         'deferRender' => true,
     ];
 
@@ -32,58 +32,28 @@ class DataTablesHelper extends Helper
      *
      * @return string
      */
-    public function renderTableUtility(TableUtility $tableUtility): string
+    public function renderTableUtility(TableUtility $tableUtility)
+    : string
     {
         return $this->table($tableUtility->getTable(), $tableUtility->getOptions(), $tableUtility->getClass());
     }
 
     /**
-     * @param array $config
-     *
-     * @throws \Aura\Intl\Exception
-     */
-    public function initialize(array $config)
-    {
-        /* set default i18n (not possible in _$defaultConfig due to use of __d() */
-        if (empty($this->getConfig('language'))) {
-            // defaults from datatables.net/reference/option/language
-            $this->setConfig('language', [
-                'emptyTable' => __d('data_tables', 'No data available in table'),
-                'info' => __d('data_tables', 'Showing _START_ to _END_ of _TOTAL_ entries'),
-                'infoEmpty' => __d('data_tables', 'No entries to show'),
-                'infoFiltered' => __d('data_tables', '(filtered from _MAX_ total entries)'),
-                'lengthMenu' => __d('data_tables', 'Show _MENU_ entries'),
-                'processing' => __d('data_tables', 'Processing...'),
-                'search' => __d('data_tables', 'Search:'),
-                'zeroRecords' => __d('data_tables', 'No matching records found'),
-                'paginate' => [
-                    'first' => __d('data_tables', 'First'),
-                    'last' => __d('data_tables', 'Last'),
-                    'next' => __d('data_tables', 'Next'),
-                    'previous' => __d('data_tables', 'Previous'),
-                ],
-                'aria' => [
-                    'sortAscending' => __d('data_tables', ': activate to sort column ascending'),
-                    'sortDescending' => __d('data_tables', ': activate to sort column descending'),
-                ],
-            ]);
-        }
-    }
-
-    /**
      * Return a table with dataTables overlay
      *
-     * @param $id          : DOM id of the table
-     * @param $dtOptions   : Options for DataTables (to be merged with this helper's config as defaults)
+     * @param $id : DOM id of the table
+     * @param $dtOptions : Options for DataTables (to be merged with this helper's config as defaults)
      * @param $htmlOptions : Options for the table, e.g. CSS classes
      *
      * @return string containing a <table> and a <script> element
      */
-    public function table(string $id = 'datatable', array $dtOptions = [], array $htmlOptions = []): string
+    public function table(string $id = 'datatable', array $dtOptions = [], array $htmlOptions = [])
+    : string
     {
         $htmlOptions = array_merge($htmlOptions, [
-            'id' => $id,
+            'id'    => $id,
             'class' => 'dataTable ' . ($htmlOptions['class'] ?? ''),
+            'style' => 'width:100%;',
         ]);
         $table = $this->Html->tag('table', '', $htmlOptions);
 
@@ -98,11 +68,12 @@ class DataTablesHelper extends Helper
      * Typically the output of this method is fed to HtmlHelper::scriptBlock()
      *
      * @param string $selector JQuery selector for the <table> element
-     * @param array  $options  Optional additional/replacement configuration to this helper's config
+     * @param array $options Optional additional/replacement configuration to this helper's config
      *
      * @return string
      */
-    public function draw(string $selector, array $options = []): string
+    public function draw(string $selector, array $options = [])
+    : string
     {
         // incorporate any defaults set earlier
         $options += $this->getConfig();
@@ -152,6 +123,39 @@ class DataTablesHelper extends Helper
                     break;
                 }
             }
+        }
+    }
+
+    /**
+     * @param array $config
+     *
+     * @throws \Aura\Intl\Exception
+     */
+    public function initialize(array $config)
+    {
+        /* set default i18n (not possible in _$defaultConfig due to use of __d() */
+        if (empty($this->getConfig('language'))) {
+            // defaults from datatables.net/reference/option/language
+            $this->setConfig('language', [
+                'emptyTable'   => __d('data_tables', 'No data available in table'),
+                'info'         => __d('data_tables', 'Showing _START_ to _END_ of _TOTAL_ entries'),
+                'infoEmpty'    => __d('data_tables', 'No entries to show'),
+                'infoFiltered' => __d('data_tables', '(filtered from _MAX_ total entries)'),
+                'lengthMenu'   => __d('data_tables', 'Show _MENU_ entries'),
+                'processing'   => __d('data_tables', 'Processing...'),
+                'search'       => __d('data_tables', 'Search:'),
+                'zeroRecords'  => __d('data_tables', 'No matching records found'),
+                'paginate'     => [
+                    'first'    => __d('data_tables', 'First'),
+                    'last'     => __d('data_tables', 'Last'),
+                    'next'     => __d('data_tables', 'Next'),
+                    'previous' => __d('data_tables', 'Previous'),
+                ],
+                'aria'         => [
+                    'sortAscending'  => __d('data_tables', ': activate to sort column ascending'),
+                    'sortDescending' => __d('data_tables', ': activate to sort column descending'),
+                ],
+            ]);
         }
     }
 }
