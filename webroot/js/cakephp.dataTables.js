@@ -27,6 +27,21 @@ dt.initDataTables = function (id, options) {
 
     /* create new instance */
     $(id).dataTable(options);
+
+    $("select[name='" + id + "_length']").change(function () {
+        $.post(options.baseLink + 'data-tables/length', {
+            table: id,
+            length: $("select[name='" + id + "_length']").val()
+        });
+    });
+    $(".pagination_button").on('click', function () {
+        var theLen = jQuery("select[name='" + id + "_length']").val();
+        var thePage = (jQuery(this).text() * 1 - 1) * theLen;
+        $.post(options.baseLink + 'data-tables/start', {
+            table: id,
+            start: thePage
+        });
+    });
 };
 
 /**

@@ -20,7 +20,6 @@ use Cake\Core\BasePlugin;
  */
 class Plugin extends BasePlugin
 {
-    protected $routesEnabled = false;
     protected $bootstrapEnabled = false;
     protected $middlewareEnabled = false;
     protected $consoleEnabled = false;

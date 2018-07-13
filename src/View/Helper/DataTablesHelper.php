@@ -11,6 +11,7 @@ use JeffersonSimaoGoncalves\Utils\TableUtility;
  * Class DataTablesHelper
  *
  * @property \Cake\View\Helper\HtmlHelper Html
+ * @property \Cake\View\Helper\UrlHelper Url
  *
  * @package DataTables\View\Helper
  */
@@ -18,7 +19,7 @@ class DataTablesHelper extends Helper
 {
     use CallbackTrait;
 
-    public $helpers = ['Html'];
+    public $helpers = ['Html', 'Url'];
 
     protected $_defaultConfig = [
         'searching'   => true,
@@ -56,6 +57,10 @@ class DataTablesHelper extends Helper
             'style' => 'width:100%;',
         ]);
         $table = $this->Html->tag('table', '', $htmlOptions);
+
+        $dtOptions['iDisplayLength'] = $this->request->getCookie($id . '_dStart') ? $this->request->getCookie($id . '_dStart') : 20;
+        $dtOptions['iDisplayStart'] = $this->request->getCookie($id . '_dLength') ? $this->request->getCookie($id . '_dLength') : 20;
+        $dtOptions['baseLink'] = $this->Url->build('/');
 
         $code = $this->draw("#{$id}", $dtOptions);
 
