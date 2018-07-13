@@ -58,8 +58,8 @@ class DataTablesHelper extends Helper
         ]);
         $table = $this->Html->tag('table', '', $htmlOptions);
 
-        $dtOptions['iDisplayLength'] = $this->request->getCookie($id . '_dStart') ? $this->request->getCookie($id . '_dStart') : 20;
-        $dtOptions['iDisplayStart'] = $this->request->getCookie($id . '_dLength') ? $this->request->getCookie($id . '_dLength') : 20;
+        $dtOptions['iDisplayStart'] = $this->request->getCookie($id . '_dStart') ? $this->request->getCookie($id . '_dStart') : 0;
+        $dtOptions['iDisplayLength'] = $this->request->getCookie($id . '_dLength') ? $this->request->getCookie($id . '_dLength') : 20;
         $dtOptions['baseLink'] = $this->Url->build('/');
 
         $code = $this->draw("#{$id}", $dtOptions);
