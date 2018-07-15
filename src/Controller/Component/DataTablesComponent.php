@@ -23,37 +23,38 @@ class DataTablesComponent extends Component
         CallbackTrait;
 
     protected $_defaultConfig = [
-        'start' => 0,
-        'length' => 10,
-        'order' => [],
-        'prefixSearch' => true, // use "LIKE …%" instead of "LIKE %…%" conditions
-        'conditionsOr' => [],  // table-wide search conditions
+        'start'         => 0,
+        'length'        => 10,
+        'order'         => [],
+        'search'        => '',
+        'prefixSearch'  => true, // use "LIKE …%" instead of "LIKE %…%" conditions
+        'conditionsOr'  => [],  // table-wide search conditions
         'conditionsAnd' => [], // column search conditions
-        'matching' => [],      // column search conditions for foreign tables
-        'comparison' => [], // per-column comparison definition
+        'matching'      => [],      // column search conditions for foreign tables
+        'comparison'    => [], // per-column comparison definition
     ];
 
     protected $_defaultComparison = [
-        'string' => 'LIKE',
-        'text' => 'LIKE',
-        'uuid' => 'LIKE',
-        'integer' => '=',
+        'string'     => 'LIKE',
+        'text'       => 'LIKE',
+        'uuid'       => 'LIKE',
+        'integer'    => '=',
         'biginteger' => '=',
-        'float' => '=',
-        'decimal' => '=',
-        'boolean' => '=',
-        'binary' => 'LIKE',
-        'date' => 'LIKE',
-        'datetime' => 'LIKE',
-        'timestamp' => 'LIKE',
-        'time' => 'LIKE',
-        'json' => 'LIKE',
+        'float'      => '=',
+        'decimal'    => '=',
+        'boolean'    => '=',
+        'binary'     => 'LIKE',
+        'date'       => 'LIKE',
+        'datetime'   => 'LIKE',
+        'timestamp'  => 'LIKE',
+        'time'       => 'LIKE',
+        'json'       => 'LIKE',
     ];
 
     protected $_viewVars = [
-        'recordsTotal' => 0,
+        'recordsTotal'    => 0,
         'recordsFiltered' => 0,
-        'draw' => 0,
+        'draw'            => 0,
     ];
 
     /** @var \Cake\ORM\Table */
@@ -80,6 +81,76 @@ class DataTablesComponent extends Component
     public function columns()
     {
         return $this->_columns;
+    }
+
+    /**
+     * Find data
+     *
+     * @param string $tableName : ORM table name
+     * @param string $finder : Finder name (as in Table::find())
+     * @param array $options : Finder options (as in Table::find())
+     * @param array $columns : Column definitions needed for filter/order operations
+     *
+     * @return Query to be evaluated (Query::count() may have already been called)
+     */
+    public function find(string $tableName, string $finder = 'all', array $options = [], array $columns = [])
+    : Query
+    {
+        $delegateSearch = $options['delegateSearch'] ?? false;
+        if (empty($columns))
+            $columns = $this->_columns;
+
+        // -- get table object
+        $this->_table = $this->getTableLocator()->get($tableName);
+
+        // -- process draw & ordering options
+        $this->_draw();
+        $this->_order($options, $columns);
+
+        // -- call table's finder w/o filters
+        $data = $this->_table->find($finder, $options);
+
+        // -- retrieve total count
+        $this->_viewVars['recordsTotal'] = $data->count();
+
+        // -- process filter options
+        $haveFilters = $this->_filter($options, $columns);
+
+        // -- apply filters
+        if ($haveFilters) {
+            if ($delegateSearch) {
+                // call finder again to process filters (provided in $options)
+                $data = $this->_table->find($finder, $options);
+            } else {
+                $data->where($this->getConfig('conditionsAnd'));
+                foreach ($this->getConfig('matching') as $association => $where) {
+                    $data->matching($association, function (Query $q) use ($where) {
+                        return $q->where($where);
+                    });
+                }
+                if (!empty($this->getConfig('conditionsOr'))) {
+                    $data->where(['or' => $this->getConfig('conditionsOr')]);
+                }
+            }
+        }
+
+        // -- retrieve filtered count
+        $this->_viewVars['recordsFiltered'] = $data->count();
+
+        // -- add limit
+        if ($this->getConfig('length') > 0) { // dt might provide -1
+            $data->limit($this->getConfig('length'));
+            $data->offset($this->getConfig('start'));
+        }
+
+        // -- sort
+        $data->order($this->getConfig('order'));
+
+        // -- set all view vars to view and serialize array
+        $this->_setViewVars();
+
+        return $data;
+
     }
 
     /**
@@ -150,7 +221,8 @@ class DataTablesComponent extends Component
      *
      * @return bool : true if additional filtering takes place
      */
-    private function _filter(array &$options, &$columns): bool
+    private function _filter(array &$options, &$columns)
+    : bool
     {
         $queryParams = $this->getController()->getRequest()->getQueryParams();
 
@@ -165,8 +237,12 @@ class DataTablesComponent extends Component
         $haveFilters = false;
         $delegateSearch = $options['delegateSearch'] ?? false;
 
+        if (!empty($queryParams['search']['value'])) {
+            $this->setConfig('search', $queryParams['search']['value'] ?? false);
+        }
+
         /* add global filter (general search field) */
-        $globalSearch = $queryParams['search']['value'] ?? false;
+        $globalSearch = $this->getConfig('search');
         if ($globalSearch) {
             if (empty($columns))
                 throw new \InvalidArgumentException('Filtering requested, but no column definitions provided.');
@@ -212,86 +288,6 @@ class DataTablesComponent extends Component
         }
 
         return $haveFilters;
-    }
-
-    /**
-     * Find data
-     *
-     * @param string $tableName : ORM table name
-     * @param string $finder    : Finder name (as in Table::find())
-     * @param array  $options   : Finder options (as in Table::find())
-     * @param array  $columns   : Column definitions needed for filter/order operations
-     *
-     * @return Query to be evaluated (Query::count() may have already been called)
-     */
-    public function find(string $tableName, string $finder = 'all', array $options = [], array $columns = []): Query
-    {
-        $delegateSearch = $options['delegateSearch'] ?? false;
-        if (empty($columns))
-            $columns = $this->_columns;
-
-        // -- get table object
-        $this->_table = $this->getTableLocator()->get($tableName);
-
-        // -- process draw & ordering options
-        $this->_draw();
-        $this->_order($options, $columns);
-
-        // -- call table's finder w/o filters
-        $data = $this->_table->find($finder, $options);
-
-        // -- retrieve total count
-        $this->_viewVars['recordsTotal'] = $data->count();
-
-        // -- process filter options
-        $haveFilters = $this->_filter($options, $columns);
-
-        // -- apply filters
-        if ($haveFilters) {
-            if ($delegateSearch) {
-                // call finder again to process filters (provided in $options)
-                $data = $this->_table->find($finder, $options);
-            } else {
-                $data->where($this->getConfig('conditionsAnd'));
-                foreach ($this->getConfig('matching') as $association => $where) {
-                    $data->matching($association, function (Query $q) use ($where) {
-                        return $q->where($where);
-                    });
-                }
-                if (!empty($this->getConfig('conditionsOr'))) {
-                    $data->where(['or' => $this->getConfig('conditionsOr')]);
-                }
-            }
-        }
-
-        // -- retrieve filtered count
-        $this->_viewVars['recordsFiltered'] = $data->count();
-
-        // -- add limit
-        if ($this->getConfig('length') > 0) { // dt might provide -1
-            $data->limit($this->getConfig('length'));
-            $data->offset($this->getConfig('start'));
-        }
-
-        // -- sort
-        $data->order($this->getConfig('order'));
-
-        // -- set all view vars to view and serialize array
-        $this->_setViewVars();
-
-        return $data;
-
-    }
-
-    private function _setViewVars()
-    {
-        $controller = $this->getController();
-
-        $_serialize = $controller->viewVars['_serialize'] ?? [];
-        $_serialize = array_merge($_serialize, array_keys($this->_viewVars));
-
-        $controller->set($this->_viewVars);
-        $controller->set('_serialize', $_serialize);
     }
 
     /**
@@ -347,12 +343,13 @@ class DataTablesComponent extends Component
     /**
      * Get comparison operator by entity and column name.
      *
-     * @param \Cake\ORM\Table|\Cake\ORM\Association $table  : Target ORM table
-     * @param string                                $column : Database column name (may be in form Table.column)
+     * @param \Cake\ORM\Table|\Cake\ORM\Association $table : Target ORM table
+     * @param string $column : Database column name (may be in form Table.column)
      *
      * @return string : Database comparison operator
      */
-    protected function _getComparison($table, string $column): string
+    protected function _getComparison($table, string $column)
+    : string
     {
         $config = new Collection($this->getConfig('comparison'));
 
@@ -369,5 +366,16 @@ class DataTablesComponent extends Component
         $columnDesc = $table->getSchema()->getColumn($column);
 
         return $this->_defaultComparison[$columnDesc['type']] ?? '=';
+    }
+
+    private function _setViewVars()
+    {
+        $controller = $this->getController();
+
+        $_serialize = $controller->viewVars['_serialize'] ?? [];
+        $_serialize = array_merge($_serialize, array_keys($this->_viewVars));
+
+        $controller->set($this->_viewVars);
+        $controller->set('_serialize', $_serialize);
     }
 }
