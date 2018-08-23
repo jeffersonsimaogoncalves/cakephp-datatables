@@ -297,6 +297,13 @@ class DataTablesComponent extends Component
      */
     private function _addCondition($column, $value, $type = 'and')
     {
+        if (is_array($column)) {
+            foreach ($column as $c) {
+                $this->_addCondition($c, $value, $type);
+            }
+
+            return;
+        }
         /* extract table (encoded in $column or default) */
         $table = $this->_table;
         if (($pos = strpos($column, '.')) !== false) {
