@@ -17,11 +17,12 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
 
     /**
      * @param        $column    string|array name or pre-filled array
-     * @param string $fieldName : ORM field this column is based on
+     * @param string|null $fieldName : ORM field this column is based on
      *
      * @return ColumnDefinition
      */
-    public function add($column, string $fieldName = null): ColumnDefinition
+    public function add($column, string $fieldName = null)
+    : ColumnDefinition
     {
         if (!is_array($column))
             $column = [
@@ -35,6 +36,17 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
         $this->store($column);
 
         return $column;
+    }
+
+    /**
+     * @param \DataTables\Lib\ColumnDefinition $column
+     */
+    protected function store(ColumnDefinition $column)
+    {
+        $this->columns[] = $column;
+        /* keep track of where we stored it.
+           Note: our array is only growing! No splicing! */
+        $this->index[$column['name']] = count($this->columns) - 1;
     }
 
     /**
@@ -60,12 +72,19 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
      *
      * @return array: column definitions
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize()
+    : array
     {
         return array_values($this->columns);
     }
 
-    public function offsetExists($offset): bool
+    /**
+     * @param mixed $offset
+     *
+     * @return bool
+     */
+    public function offsetExists($offset)
+    : bool
     {
         if (is_numeric($offset))
             return isset($this->columns[$offset]);
@@ -73,6 +92,11 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
         return isset($this->index[$offset]);
     }
 
+    /**
+     * @param mixed $offset
+     *
+     * @return mixed
+     */
     public function offsetGet($offset)
     {
         if (is_numeric($offset))
@@ -81,11 +105,18 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
         return $this->columns[$this->index[$offset]];
     }
 
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
     public function offsetSet($offset, $value)
     {
         throw new \BadMethodCallException('Direct setting is not supported! Use add().');
     }
 
+    /**
+     * @param mixed $offset
+     */
     public function offsetUnset($offset)
     {
         /* we do not allow splicing because DataTables uses a column's index
@@ -94,21 +125,19 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
         throw new \BadMethodCallException('Unset is not supported!');
     }
 
+    /**
+     * @return \ArrayIterator|\Traversable
+     */
     public function getIterator()
     {
         return new \ArrayIterator($this->columns);
     }
 
+    /**
+     * @return int
+     */
     public function count()
     {
         return count($this->columns);
-    }
-
-    protected function store(ColumnDefinition $column)
-    {
-        $this->columns[] = $column;
-        /* keep track of where we stored it.
-           Note: our array is only growing! No splicing! */
-        $this->index[$column['name']] = count($this->columns) - 1;
     }
 }

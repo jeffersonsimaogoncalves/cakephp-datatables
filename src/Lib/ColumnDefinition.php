@@ -28,6 +28,12 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
     // will be filled in constructor
     protected $switchesNegative = [];
 
+    /**
+     * ColumnDefinition constructor.
+     *
+     * @param array $template
+     * @param \DataTables\Lib\ColumnDefinitions $owner
+     */
     public function __construct(array $template, ColumnDefinitions $owner)
     {
         $this->content = $template;
@@ -46,7 +52,8 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
      *
      * @return \DataTables\Lib\ColumnDefinition
      */
-    public function add(...$args): ColumnDefinition
+    public function add(...$args)
+    : ColumnDefinition
     {
         return $this->owner->add(...$args);
     }
@@ -59,7 +66,8 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
      *
      * @return ColumnDefinition
      */
-    public function set($key, $value = null): ColumnDefinition
+    public function set($key, $value = null)
+    : ColumnDefinition
     {
         if (is_array($key)) {
             if (!empty($value))
@@ -74,7 +82,14 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
     }
 
     /* provide some convenience wrappers for set() */
-    public function __call($name, $arguments): ColumnDefinition
+    /**
+     * @param $name
+     * @param $arguments
+     *
+     * @return \DataTables\Lib\ColumnDefinition
+     */
+    public function __call($name, $arguments)
+    : ColumnDefinition
     {
         if (in_array($name, $this->switchesPositive)) {
             if (!empty($arguments))
@@ -93,7 +108,13 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
         return $this;
     }
 
-    public function unset(string $key): ColumnDefinition
+    /**
+     * @param string $key
+     *
+     * @return \DataTables\Lib\ColumnDefinition
+     */
+    public function unset(string $key)
+    : ColumnDefinition
     {
         unset($this->content[$key]);
 
@@ -106,28 +127,47 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
      *
      * @return ColumnDefinition
      */
-    public function render(string $name, array $args = []): ColumnDefinition
+    public function render(string $name, array $args = [])
+    : ColumnDefinition
     {
         $this->content['render'] = new CallbackFunction($name, $args);
 
         return $this;
     }
 
-    public function jsonSerialize(): array
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    : array
     {
         return $this->content;
     }
 
+    /**
+     * @param mixed $offset
+     *
+     * @return bool
+     */
     public function offsetExists($offset)
     {
         return isset($this->content[$offset]);
     }
 
+    /**
+     * @param mixed $offset
+     *
+     * @return mixed
+     */
     public function offsetGet($offset)
     {
         return $this->content[$offset];
     }
 
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     */
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
@@ -137,6 +177,9 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
         }
     }
 
+    /**
+     * @param mixed $offset
+     */
     public function offsetUnset($offset)
     {
         unset($this->content[$offset]);

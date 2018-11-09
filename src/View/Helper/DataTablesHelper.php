@@ -48,7 +48,7 @@ class DataTablesHelper extends Helper
      *
      * @return string containing a <table> and a <script> element
      */
-    public function table(string $id = 'datatable', array $dtOptions = [], array $htmlOptions = [])
+    public function table($id = 'datatable', array $dtOptions = [], array $htmlOptions = [])
     : string
     {
         $htmlOptions = array_merge($htmlOptions, [
@@ -96,6 +96,10 @@ class DataTablesHelper extends Helper
         return "dt.initDataTables('{$selector}', {$json});\n";
     }
 
+    /**
+     * @param array $order
+     * @param $columns
+     */
     protected function translateOrder(array &$order, &$columns)
     {
         // sanitize cakephp style input [a => b] -> [[a, b]]
@@ -129,8 +133,6 @@ class DataTablesHelper extends Helper
 
     /**
      * @param array $config
-     *
-     * @throws \Aura\Intl\Exception
      */
     public function initialize(array $config)
     {

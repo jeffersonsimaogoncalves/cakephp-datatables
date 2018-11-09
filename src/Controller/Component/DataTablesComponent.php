@@ -63,6 +63,9 @@ class DataTablesComponent extends Component
     /** @var \DataTables\Lib\ColumnDefinitions */
     protected $_columns = null;
 
+    /**
+     * @param array $config
+     */
     public function initialize(array $config)
     {
         /* Set default comparison operators for field types */
