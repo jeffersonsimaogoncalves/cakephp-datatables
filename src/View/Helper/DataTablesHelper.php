@@ -55,12 +55,17 @@ class DataTablesHelper extends Helper
             'id'    => $id,
             'class' => 'dataTable ' . ($htmlOptions['class'] ?? ''),
             'style' => 'width:100%;',
+            'block' => false,
         ]);
+
+        $blockScript = $htmlOptions['block'];
+        unset($htmlOptions['block']);
+
         $table = $this->Html->tag('table', '', $htmlOptions);
 
         $code = $this->draw("#{$id}", $dtOptions);
 
-        return $table . $this->Html->scriptBlock($code, ['block' => true]);
+        return $table . $this->Html->scriptBlock($code, ['block' => $blockScript]);
     }
 
     /**
