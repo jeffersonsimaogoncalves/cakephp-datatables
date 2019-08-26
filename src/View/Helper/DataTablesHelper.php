@@ -22,9 +22,9 @@ class DataTablesHelper extends Helper
     public $helpers = ['Html', 'Url'];
 
     protected $_defaultConfig = [
-        'searching'   => true,
-        'processing'  => true,
-        'serverSide'  => true,
+        'searching' => true,
+        'processing' => true,
+        'serverSide' => true,
         'deferRender' => true,
     ];
 
@@ -33,8 +33,7 @@ class DataTablesHelper extends Helper
      *
      * @return string
      */
-    public function renderTableUtility(TableUtility $tableUtility)
-    : string
+    public function renderTableUtility(TableUtility $tableUtility): string
     {
         return $this->table($tableUtility->getTable(), $tableUtility->getOptions(), $tableUtility->getClass());
     }
@@ -48,15 +47,14 @@ class DataTablesHelper extends Helper
      *
      * @return string containing a <table> and a <script> element
      */
-    public function table($id = 'datatable', array $dtOptions = [], array $htmlOptions = [])
-    : string
+    public function table($id = 'datatable', array $dtOptions = [], array $htmlOptions = []): string
     {
-        $htmlOptions = array_merge($htmlOptions, [
-            'id'    => $id,
+        $htmlOptions = array_merge([
+            'id' => $id,
             'class' => 'dataTable ' . ($htmlOptions['class'] ?? ''),
             'style' => 'width:100%;',
             'block' => false,
-        ]);
+        ], $htmlOptions);
 
         $blockScript = $htmlOptions['block'];
         unset($htmlOptions['block']);
@@ -78,8 +76,7 @@ class DataTablesHelper extends Helper
      *
      * @return string
      */
-    public function draw(string $selector, array $options = [])
-    : string
+    public function draw(string $selector, array $options = []): string
     {
         // incorporate any defaults set earlier
         $options += $this->getConfig();
@@ -99,6 +96,37 @@ class DataTablesHelper extends Helper
 
         // return a call to initializer method
         return "dt.initDataTables('{$selector}', {$json});\n";
+    }
+
+    /**
+     * @param array $config
+     */
+    public function initialize(array $config)
+    {
+        /* set default i18n (not possible in _$defaultConfig due to use of __d() */
+        if (empty($this->getConfig('language'))) {
+            // defaults from datatables.net/reference/option/language
+            $this->setConfig('language', [
+                'emptyTable' => __d('data_tables', 'No data available in table'),
+                'info' => __d('data_tables', 'Showing _START_ to _END_ of _TOTAL_ entries'),
+                'infoEmpty' => __d('data_tables', 'No entries to show'),
+                'infoFiltered' => __d('data_tables', '(filtered from _MAX_ total entries)'),
+                'lengthMenu' => __d('data_tables', 'Show _MENU_ entries'),
+                'processing' => __d('data_tables', 'Processing...'),
+                'search' => __d('data_tables', 'Search:'),
+                'zeroRecords' => __d('data_tables', 'No matching records found'),
+                'paginate' => [
+                    'first' => __d('data_tables', 'First'),
+                    'last' => __d('data_tables', 'Last'),
+                    'next' => __d('data_tables', 'Next'),
+                    'previous' => __d('data_tables', 'Previous'),
+                ],
+                'aria' => [
+                    'sortAscending' => __d('data_tables', ': activate to sort column ascending'),
+                    'sortDescending' => __d('data_tables', ': activate to sort column descending'),
+                ],
+            ]);
+        }
     }
 
     /**
@@ -133,37 +161,6 @@ class DataTablesHelper extends Helper
                     break;
                 }
             }
-        }
-    }
-
-    /**
-     * @param array $config
-     */
-    public function initialize(array $config)
-    {
-        /* set default i18n (not possible in _$defaultConfig due to use of __d() */
-        if (empty($this->getConfig('language'))) {
-            // defaults from datatables.net/reference/option/language
-            $this->setConfig('language', [
-                'emptyTable'   => __d('data_tables', 'No data available in table'),
-                'info'         => __d('data_tables', 'Showing _START_ to _END_ of _TOTAL_ entries'),
-                'infoEmpty'    => __d('data_tables', 'No entries to show'),
-                'infoFiltered' => __d('data_tables', '(filtered from _MAX_ total entries)'),
-                'lengthMenu'   => __d('data_tables', 'Show _MENU_ entries'),
-                'processing'   => __d('data_tables', 'Processing...'),
-                'search'       => __d('data_tables', 'Search:'),
-                'zeroRecords'  => __d('data_tables', 'No matching records found'),
-                'paginate'     => [
-                    'first'    => __d('data_tables', 'First'),
-                    'last'     => __d('data_tables', 'Last'),
-                    'next'     => __d('data_tables', 'Next'),
-                    'previous' => __d('data_tables', 'Previous'),
-                ],
-                'aria'         => [
-                    'sortAscending'  => __d('data_tables', ': activate to sort column ascending'),
-                    'sortDescending' => __d('data_tables', ': activate to sort column descending'),
-                ],
-            ]);
         }
     }
 }

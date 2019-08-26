@@ -52,8 +52,7 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
      *
      * @return \DataTables\Lib\ColumnDefinition
      */
-    public function add(...$args)
-    : ColumnDefinition
+    public function add(...$args): ColumnDefinition
     {
         return $this->owner->add(...$args);
     }
@@ -66,8 +65,7 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
      *
      * @return ColumnDefinition
      */
-    public function set($key, $value = null)
-    : ColumnDefinition
+    public function set($key, $value = null): ColumnDefinition
     {
         if (is_array($key)) {
             if (!empty($value))
@@ -88,8 +86,7 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
      *
      * @return \DataTables\Lib\ColumnDefinition
      */
-    public function __call($name, $arguments)
-    : ColumnDefinition
+    public function __call($name, $arguments): ColumnDefinition
     {
         if (in_array($name, $this->switchesPositive)) {
             if (!empty($arguments))
@@ -113,8 +110,7 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
      *
      * @return \DataTables\Lib\ColumnDefinition
      */
-    public function unset(string $key)
-    : ColumnDefinition
+    public function unset(string $key): ColumnDefinition
     {
         unset($this->content[$key]);
 
@@ -127,8 +123,7 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
      *
      * @return ColumnDefinition
      */
-    public function render(string $name, array $args = [])
-    : ColumnDefinition
+    public function render(string $name, array $args = []): ColumnDefinition
     {
         $this->content['render'] = new CallbackFunction($name, $args);
 
@@ -138,8 +133,7 @@ class ColumnDefinition implements \JsonSerializable, \ArrayAccess
     /**
      * @return array
      */
-    public function jsonSerialize()
-    : array
+    public function jsonSerialize(): array
     {
         return $this->content;
     }

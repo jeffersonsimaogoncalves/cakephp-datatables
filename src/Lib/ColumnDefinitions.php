@@ -21,8 +21,7 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
      *
      * @return ColumnDefinition
      */
-    public function add($column, string $fieldName = null)
-    : ColumnDefinition
+    public function add($column, string $fieldName = null): ColumnDefinition
     {
         if (!is_array($column))
             $column = [
@@ -72,8 +71,7 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
      *
      * @return array: column definitions
      */
-    public function jsonSerialize()
-    : array
+    public function jsonSerialize(): array
     {
         return array_values($this->columns);
     }
@@ -83,8 +81,7 @@ class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAgg
      *
      * @return bool
      */
-    public function offsetExists($offset)
-    : bool
+    public function offsetExists($offset): bool
     {
         if (is_numeric($offset))
             return isset($this->columns[$offset]);

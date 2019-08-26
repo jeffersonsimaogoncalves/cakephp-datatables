@@ -23,38 +23,38 @@ class DataTablesComponent extends Component
         CallbackTrait;
 
     protected $_defaultConfig = [
-        'start'         => 0,
-        'length'        => 10,
-        'order'         => [],
-        'search'        => '',
-        'prefixSearch'  => true, // use "LIKE …%" instead of "LIKE %…%" conditions
-        'conditionsOr'  => [],  // table-wide search conditions
+        'start' => 0,
+        'length' => 10,
+        'order' => [],
+        'search' => '',
+        'prefixSearch' => true, // use "LIKE …%" instead of "LIKE %…%" conditions
+        'conditionsOr' => [],  // table-wide search conditions
         'conditionsAnd' => [], // column search conditions
-        'matching'      => [],      // column search conditions for foreign tables
-        'comparison'    => [], // per-column comparison definition
+        'matching' => [],      // column search conditions for foreign tables
+        'comparison' => [], // per-column comparison definition
     ];
 
     protected $_defaultComparison = [
-        'string'     => 'LIKE',
-        'text'       => 'LIKE',
-        'uuid'       => 'LIKE',
-        'integer'    => '=',
+        'string' => 'LIKE',
+        'text' => 'LIKE',
+        'uuid' => 'LIKE',
+        'integer' => '=',
         'biginteger' => '=',
-        'float'      => '=',
-        'decimal'    => '=',
-        'boolean'    => '=',
-        'binary'     => 'LIKE',
-        'date'       => 'LIKE',
-        'datetime'   => 'LIKE',
-        'timestamp'  => 'LIKE',
-        'time'       => 'LIKE',
-        'json'       => 'LIKE',
+        'float' => '=',
+        'decimal' => '=',
+        'boolean' => '=',
+        'binary' => 'LIKE',
+        'date' => 'LIKE',
+        'datetime' => 'LIKE',
+        'timestamp' => 'LIKE',
+        'time' => 'LIKE',
+        'json' => 'LIKE',
     ];
 
     protected $_viewVars = [
-        'recordsTotal'    => 0,
+        'recordsTotal' => 0,
         'recordsFiltered' => 0,
-        'draw'            => 0,
+        'draw' => 0,
     ];
 
     /** @var \Cake\ORM\Table */
@@ -96,8 +96,7 @@ class DataTablesComponent extends Component
      *
      * @return Query to be evaluated (Query::count() may have already been called)
      */
-    public function find(string $tableName, string $finder = 'all', array $options = [], array $columns = [])
-    : Query
+    public function find(string $tableName, string $finder = 'all', array $options = [], array $columns = []): Query
     {
         $delegateSearch = $options['delegateSearch'] ?? false;
         if (empty($columns))
@@ -224,8 +223,7 @@ class DataTablesComponent extends Component
      *
      * @return bool : true if additional filtering takes place
      */
-    private function _filter(array &$options, &$columns)
-    : bool
+    private function _filter(array &$options, &$columns): bool
     {
         $queryParams = $this->getController()->getRequest()->getQueryParams();
 
@@ -358,8 +356,7 @@ class DataTablesComponent extends Component
      *
      * @return string : Database comparison operator
      */
-    protected function _getComparison($table, string $column)
-    : string
+    protected function _getComparison($table, string $column): string
     {
         $config = new Collection($this->getConfig('comparison'));
 
@@ -381,8 +378,9 @@ class DataTablesComponent extends Component
     private function _setViewVars()
     {
         $controller = $this->getController();
+        $view = $controller->createView();
 
-        $_serialize = $controller->viewVars['_serialize'] ?? [];
+        $_serialize = $view->get('_serialize', []);
         $_serialize = array_merge($_serialize, array_keys($this->_viewVars));
 
         $controller->set($this->_viewVars);
