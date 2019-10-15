@@ -315,6 +315,30 @@ class DataTablesComponent extends Component
             $column = substr($column, $pos + 1);
         }
 
+        $columnDesc = $table->getSchema()->getColumn($column);
+        $columnType = $columnDesc['type'];
+        if ($columnType !== 'string' && $columnType !== 'text') {
+            try {
+                switch ($columnType) {
+                    case "tinyinteger":
+                    case "smallinteger":
+                    case "integer":
+                    case "biginteger":
+                        $value = intval($value);
+                        break;
+                    case "decimal":
+                    case "float":
+                        $value = floatval($value);
+                        break;
+                }
+                if ($value === null) {
+                    return;
+                }
+            } catch (\Exception $e) {
+                return;
+            }
+        }
+
         $textCast = "";
 
         /* build condition */
