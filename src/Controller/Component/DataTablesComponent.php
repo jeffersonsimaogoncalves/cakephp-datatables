@@ -63,6 +63,9 @@ class DataTablesComponent extends Component
     /** @var \DataTables\Lib\ColumnDefinitions */
     protected $_columns = null;
 
+    /** @var \Cake\ORM\Table[]|array */
+    private $tables = [];
+
     /**
      * @param array $config
      */
@@ -310,7 +313,18 @@ class DataTablesComponent extends Component
         if (($pos = strpos($column, '.')) !== false) {
             $tableAlias = substr($column, 0, $pos);
             if ($this->_table->getAlias() !== $tableAlias) {
-                $table = $this->_table->getAssociation($tableAlias);
+                try {
+                    $table = $this->_table->getAssociation($tableAlias);
+                    $this->tables[$tableAlias] = $table;
+                } catch (\Exception $e) {
+                    foreach ($this->tables as $t) {
+                        try {
+                            $table = $t->getAssociation($tableAlias);
+                            $this->tables[$tableAlias] = $table;
+                        } catch (\Exception $e) {
+                        }
+                    }
+                }
             }
             $column = substr($column, $pos + 1);
         }
