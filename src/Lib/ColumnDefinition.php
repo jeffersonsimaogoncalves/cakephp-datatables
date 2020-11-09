@@ -2,10 +2,7 @@
 
 namespace DataTables\Lib;
 
-use ArrayAccess;
-use InvalidArgumentException;
 use JeffersonSimaoGoncalves\Utils\Lib\CallbackFunction;
-use JsonSerializable;
 
 /**
  * A convenience array wrapper that holds a single column definition
@@ -19,7 +16,7 @@ use JsonSerializable;
  *
  * @package DataTables\Lib
  */
-class ColumnDefinition implements JsonSerializable, ArrayAccess
+class ColumnDefinition implements \JsonSerializable, \ArrayAccess
 {
     /** @var array holding all column properties */
     public $content = [];
@@ -34,8 +31,8 @@ class ColumnDefinition implements JsonSerializable, ArrayAccess
     /**
      * ColumnDefinition constructor.
      *
-     * @param  array  $template
-     * @param  \DataTables\Lib\ColumnDefinitions  $owner
+     * @param array $template
+     * @param \DataTables\Lib\ColumnDefinitions $owner
      */
     public function __construct(array $template, ColumnDefinitions $owner)
     {
@@ -43,7 +40,7 @@ class ColumnDefinition implements JsonSerializable, ArrayAccess
         $this->owner = $owner;
 
         $this->switchesNegative = array_map(function ($e) {
-            return 'not'.ucfirst($e);
+            return 'not' . ucfirst($e);
         }, $this->switchesPositive);
     }
 
@@ -51,7 +48,7 @@ class ColumnDefinition implements JsonSerializable, ArrayAccess
      * Refer back to owner's add()
      * A convenient way to add another column
      *
-     * @param  array  $args
+     * @param array $args
      *
      * @return \DataTables\Lib\ColumnDefinition
      */
@@ -64,16 +61,15 @@ class ColumnDefinition implements JsonSerializable, ArrayAccess
      * Set one or many properties
      *
      * @param $key   string|array If array given, it should be key -> value
-     * @param $value  : The singular value to set, if string $key given
+     * @param $value : The singular value to set, if string $key given
      *
      * @return ColumnDefinition
      */
     public function set($key, $value = null): ColumnDefinition
     {
         if (is_array($key)) {
-            if (!empty($value)) {
-                throw new InvalidArgumentException("Provide either array or key/value pair!");
-            }
+            if (!empty($value))
+                throw new \InvalidArgumentException("Provide either array or key/value pair!");
 
             $this->content = $key + $this->content;
         } else {
@@ -93,16 +89,14 @@ class ColumnDefinition implements JsonSerializable, ArrayAccess
     public function __call($name, $arguments): ColumnDefinition
     {
         if (in_array($name, $this->switchesPositive)) {
-            if (!empty($arguments)) {
-                throw new InvalidArgumentException("$name() takes no arguments!");
-            }
+            if (!empty($arguments))
+                throw new \InvalidArgumentException("$name() takes no arguments!");
 
             $this->content[$name] = true;
         }
         if (in_array($name, $this->switchesNegative)) {
-            if (!empty($arguments)) {
-                throw new InvalidArgumentException("$name() takes no arguments!");
-            }
+            if (!empty($arguments))
+                throw new \InvalidArgumentException("$name() takes no arguments!");
 
             $name = lcfirst(substr($name, 3));
             $this->content[$name] = false;
@@ -112,7 +106,7 @@ class ColumnDefinition implements JsonSerializable, ArrayAccess
     }
 
     /**
-     * @param  string  $key
+     * @param string $key
      *
      * @return \DataTables\Lib\ColumnDefinition
      */
@@ -124,8 +118,8 @@ class ColumnDefinition implements JsonSerializable, ArrayAccess
     }
 
     /**
-     * @param $name  : see CallbackFunction::__construct
-     * @param $args  : see CallbackFunction::__construct
+     * @param $name : see CallbackFunction::__construct
+     * @param $args : see CallbackFunction::__construct
      *
      * @return ColumnDefinition
      */
@@ -145,7 +139,7 @@ class ColumnDefinition implements JsonSerializable, ArrayAccess
     }
 
     /**
-     * @param  mixed  $offset
+     * @param mixed $offset
      *
      * @return bool
      */
@@ -155,7 +149,7 @@ class ColumnDefinition implements JsonSerializable, ArrayAccess
     }
 
     /**
-     * @param  mixed  $offset
+     * @param mixed $offset
      *
      * @return mixed
      */
@@ -165,8 +159,8 @@ class ColumnDefinition implements JsonSerializable, ArrayAccess
     }
 
     /**
-     * @param  mixed  $offset
-     * @param  mixed  $value
+     * @param mixed $offset
+     * @param mixed $value
      */
     public function offsetSet($offset, $value)
     {
@@ -178,7 +172,7 @@ class ColumnDefinition implements JsonSerializable, ArrayAccess
     }
 
     /**
-     * @param  mixed  $offset
+     * @param mixed $offset
      */
     public function offsetUnset($offset)
     {

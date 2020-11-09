@@ -25,9 +25,9 @@
     }
   ],
   "require": {
-    "php": "^7.2",
-    "cakephp/cakephp": "^4.0",
-    "jeffersonsimaogoncalves/cakephp-utility": "^4.1.0"
+    "php": ">=7.0",
+    "cakephp/cakephp": "^3.6",
+    "jeffersonsimaogoncalves/cakephp-utility": "^5.0"
   },
   "support": {
     "issues": "https://github.com/jeffersonsimaogoncalves/cakephp-datatables/issues",

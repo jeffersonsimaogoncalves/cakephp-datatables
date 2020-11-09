@@ -5,41 +5,31 @@
 
 namespace DataTables\Lib;
 
-use ArrayAccess;
-use ArrayIterator;
-use BadMethodCallException;
-use Countable;
-use InvalidArgumentException;
-use IteratorAggregate;
-use JsonSerializable;
-
 /**
  * Class ColumnDefinitions
  *
  * @package DataTables\Lib
  */
-class ColumnDefinitions implements JsonSerializable, ArrayAccess, IteratorAggregate, Countable
+class ColumnDefinitions implements \JsonSerializable, \ArrayAccess, \IteratorAggregate, \Countable
 {
     protected $columns = [];
     protected $index = [];
 
     /**
      * @param        $column    string|array name or pre-filled array
-     * @param  string|null  $fieldName  : ORM field this column is based on
+     * @param string|null $fieldName : ORM field this column is based on
      *
      * @return ColumnDefinition
      */
     public function add($column, string $fieldName = null): ColumnDefinition
     {
-        if (!is_array($column)) {
+        if (!is_array($column))
             $column = [
                 'name' => $column,
                 'data' => $column, // a good guess (user can adjust it later)
             ];
-        }
-        if ($fieldName) {
+        if ($fieldName)
             $column['field'] = $fieldName;
-        }
 
         $column = new ColumnDefinition($column, $this);
         $this->store($column);
@@ -48,7 +38,7 @@ class ColumnDefinitions implements JsonSerializable, ArrayAccess, IteratorAggreg
     }
 
     /**
-     * @param  \DataTables\Lib\ColumnDefinition  $column
+     * @param \DataTables\Lib\ColumnDefinition $column
      */
     protected function store(ColumnDefinition $column)
     {
@@ -67,13 +57,12 @@ class ColumnDefinitions implements JsonSerializable, ArrayAccess, IteratorAggreg
     public function setTitles(array $titles)
     {
         if (count($titles) != count($this->columns)) {
-            $msg = 'Have '.count($this->columns).' columns, but '.count($titles).' titles given!';
-            throw new InvalidArgumentException($msg);
+            $msg = 'Have ' . count($this->columns) . ' columns, but ' . count($titles) . ' titles given!';
+            throw new \InvalidArgumentException($msg);
         }
         foreach ($titles as $i => $t) {
-            if (!empty($t)) {
+            if (!empty($t))
                 $this->columns[$i]['title'] = $t;
-            }
         }
     }
 
@@ -88,51 +77,49 @@ class ColumnDefinitions implements JsonSerializable, ArrayAccess, IteratorAggreg
     }
 
     /**
-     * @param  mixed  $offset
+     * @param mixed $offset
      *
      * @return bool
      */
     public function offsetExists($offset): bool
     {
-        if (is_numeric($offset)) {
+        if (is_numeric($offset))
             return isset($this->columns[$offset]);
-        }
 
         return isset($this->index[$offset]);
     }
 
     /**
-     * @param  mixed  $offset
+     * @param mixed $offset
      *
      * @return mixed
      */
     public function offsetGet($offset)
     {
-        if (is_numeric($offset)) {
+        if (is_numeric($offset))
             return $this->columns[$offset];
-        }
 
         return $this->columns[$this->index[$offset]];
     }
 
     /**
-     * @param  mixed  $offset
-     * @param  mixed  $value
+     * @param mixed $offset
+     * @param mixed $value
      */
     public function offsetSet($offset, $value)
     {
-        throw new BadMethodCallException('Direct setting is not supported! Use add().');
+        throw new \BadMethodCallException('Direct setting is not supported! Use add().');
     }
 
     /**
-     * @param  mixed  $offset
+     * @param mixed $offset
      */
     public function offsetUnset($offset)
     {
         /* we do not allow splicing because DataTables uses a column's index
            for the ordering command. So the order of columns needs to stay
            consistent from the Controller down to the table displayed. */
-        throw new BadMethodCallException('Unset is not supported!');
+        throw new \BadMethodCallException('Unset is not supported!');
     }
 
     /**
@@ -140,7 +127,7 @@ class ColumnDefinitions implements JsonSerializable, ArrayAccess, IteratorAggreg
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->columns);
+        return new \ArrayIterator($this->columns);
     }
 
     /**
