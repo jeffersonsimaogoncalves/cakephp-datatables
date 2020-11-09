@@ -26,7 +26,6 @@
   ],
   "require": {
     "php": "^7.2",
-    "ext-json": "@stable",
     "cakephp/cakephp": "^4.0",
     "jeffersonsimaogoncalves/cakephp-utility": "^4.1.0"
   },
