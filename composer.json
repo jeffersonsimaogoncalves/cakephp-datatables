@@ -25,10 +25,10 @@
     }
   ],
   "require": {
-    "php": ">=7.0",
+    "php": "^7.2",
     "ext-json": "@stable",
-    "cakephp/cakephp": "^3.6",
-    "jeffersonsimaogoncalves/cakephp-utils": "@stable"
+    "cakephp/cakephp": "^4.0",
+    "jeffersonsimaogoncalves/cakephp-utils": "3.*"
   },
   "support": {
     "issues": "https://github.com/jeffersonsimaogoncalves/cakephp-datatables/issues",
