@@ -2,7 +2,7 @@
 
 namespace DataTables\Lib;
 
-use JeffersonSimaoGoncalves\Utils\Lib\CallbackFunction;
+use JeffersonSimaoGoncalves\Utility\Lib\CallbackFunction;
 
 /**
  * A convenience array wrapper that holds a single column definition

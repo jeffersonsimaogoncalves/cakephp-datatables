@@ -10,7 +10,7 @@ use Cake\Http\Exception\BadRequestException;
 use Cake\ORM\Locator\LocatorAwareTrait;
 use Cake\ORM\Query;
 use DataTables\Lib\ColumnDefinitions;
-use JeffersonSimaoGoncalves\Utils\CallbackTrait;
+use JeffersonSimaoGoncalves\Utility\CallbackTrait;
 
 /**
  * Class DataTablesComponent
