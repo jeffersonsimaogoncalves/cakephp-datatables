@@ -27,7 +27,7 @@
   "require": {
     "php": ">=7.0",
     "cakephp/cakephp": "^3.6",
-    "jeffersonsimaogoncalves/cakephp-utility": "^5.1"
+    "jeffersonsimaogoncalves/cakephp-utility": ">=5.1.0"
   },
   "support": {
     "issues": "https://github.com/jeffersonsimaogoncalves/cakephp-datatables/issues",
